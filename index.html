@@ -253,7 +253,7 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
         
         // --- البيانات المحقونة (Default Data Injection) ---
-        // يمكنك تعديل هذه الأسماء مستقبلاً من هنا مباشرة
+        // يمكنك تعديل هذه الأسماء مستقبلاً من هنا مباشرة أو رفع ملف الإكسل لتحديثها كلها دفعة واحدة
         const injectedStudents = [
             { id: "0501111111", name: "أحمد بن خالد السبيعي", class: "الأول المتوسط", mobile: "0501111111" },
             { id: "0502222222", name: "محمد بن عبدالله الدوسري", class: "الأول المتوسط", mobile: "0502222222" },
@@ -385,7 +385,7 @@
             return newViolation;
         }
 
-        // --- معالجة الملفات اليدوية (إذا أراد المستخدم تحديث البيانات المحقونة) ---
+        // --- معالجة الملفات اليدوية (إذا أراد المستخدم تحديث البيانات المحقونة بـ 327 طالب) ---
         function handleExcelUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -633,6 +633,24 @@
             if(indicator) indicator.remove();
         }
 
+        // --- دالة الاتصال مع إعادة المحاولة الذكية (Exponential Backoff) لتفادي الانقطاعات ---
+        async function fetchWithRetry(url, options) {
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < delays.length; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    const data = await response.json();
+                    if (!response.ok) {
+                        throw new Error(data.error?.message || 'API Error');
+                    }
+                    return data;
+                } catch (error) {
+                    if (i === delays.length - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, delays[i]));
+                }
+            }
+        }
+
         function appendAIMessage(text, waData = null, recordedBadge = null, currentStudentObj = null) {
             removeTypingIndicator();
             const msgDiv = document.createElement('div');
@@ -771,12 +789,12 @@ ${truncatedRules}
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             const payload = {
                 contents: [{ parts: [{ text: userPrompt }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: { temperature: 0.2 }
             };
 
             try {
-                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                const result = await response.json();
+                const result = await fetchWithRetry(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 let aiText = result.candidates?.[0]?.content?.parts?.[0]?.text;
 
                 if (aiText) {
@@ -814,7 +832,7 @@ ${truncatedRules}
                 }
             } catch (error) {
                 console.error(error);
-                appendAIMessage("عذراً، حدث خطأ في الاتصال بالشبكة. يرجى المحاولة مجدداً.");
+                appendAIMessage("عذراً، حدث ضغط مؤقت أو انقطاع في خوادم الذكاء الاصطناعي. يرجى المحاولة مجدداً بعد قليل.");
             }
         }
 
