@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>بوابة الترشيح | مدرسة الجشة المتوسطة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* المتغيرات الجمالية الحديثة - ألوان الهوية الجديدة لوزارة التعليم */
+        :root {
+            /* الألوان الأساسية للهوية */
+            --moe-green: #07a869;
+            --moe-blue: #3d7eb9;
+            --moe-teal: #0da9a6;
+            --moe-dark: #15445a;
+            --moe-gold: #c1b489;
+            --moe-gray: #c2c1c1;
+
+            /* تدرجات مبنية على الهوية */
+            --primary-gradient: linear-gradient(135deg, var(--moe-teal), var(--moe-green));
+            --primary-hover: linear-gradient(135deg, var(--moe-green), var(--moe-teal));
+            --accent-gradient: linear-gradient(135deg, var(--moe-gold), #a59871);
+            --danger-gradient: linear-gradient(135deg, #e11d48, #be123c); /* أبقينا الأحمر للتحذيرات */
+            --dark-gradient: linear-gradient(135deg, var(--moe-dark), #0f3040);
+            
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 10px 30px -10px rgba(21, 68, 90, 0.15); /* ظل مستوحى من اللون الكحلي */
+            
+            --text-main: var(--moe-dark);
+            --text-muted: #5e7381; /* درجة رمادية مزرقة خفيفة تتناسب مع الكحلي */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* خلفية ناعمة تتناسب مع الهوية */
+        body {
+            background-color: #f4f7f6; /* لون خلفية مريح جداً */
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(13, 169, 166, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(61, 126, 185, 0.1) 0px, transparent 50%);
+            min-height: 100vh;
+            font-family: 'Tajawal', Tahoma, sans-serif;
+            font-size: 13px;
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, strong, th, label, .card-title, button, .top-student { font-weight: 700 !important; }
+
+        /* الكلاس الزجاجي الأساسي */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 1.5rem;
+        }
+
+        /* شاشة الدخول */
+        #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
+        .login-card { padding: 3rem 2.5rem; width: 100%; max-width: 420px; text-align: center; border-top: 6px solid var(--moe-teal); animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .login-header h2 { color: var(--moe-dark); font-size: 1.8rem; margin-bottom: 5px; letter-spacing: -0.5px; }
+        .login-header p { color: var(--text-muted); margin-bottom: 30px; font-size: 1rem; }
+        
+        .tabs-container { display: flex; gap: 12px; margin-bottom: 25px; background: rgba(194, 193, 193, 0.2); padding: 5px; border-radius: 15px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: transparent; color: var(--text-muted); border-radius: 10px; cursor: pointer; font-size: 1rem; transition: 0.4s; font-family: 'Tajawal', sans-serif;}
+        .tab-btn.active { background: white; color: var(--moe-teal); box-shadow: 0 4px 15px rgba(0,0,0,0.05); font-weight: bold; transform: scale(1.02); }
+        
+        .login-input { width: 100%; padding: 16px; border: 2px solid var(--moe-gray); background: rgba(255,255,255,0.9); border-radius: 15px; margin-bottom: 20px; font-family: inherit; font-size: 1rem; outline: none; transition: 0.3s; text-align: center; color: var(--text-main); }
+        .login-input:focus { border-color: var(--moe-teal); background: white; box-shadow: 0 0 0 4px rgba(13, 169, 166, 0.15); transform: translateY(-2px); }
+        
+        .login-submit { width: 100%; background: var(--primary-gradient); color: white; border: none; padding: 16px; border-radius: 15px; font-size: 1.1rem; cursor: pointer; transition: 0.4s; font-family: 'Tajawal', sans-serif;}
+        .login-submit:hover { background: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(7, 168, 105, 0.3); }
+
+        /* الهيكل الأساسي */
+        .container { max-width: 1400px; margin: 2rem auto; border-radius: 2rem; overflow: hidden; animation: fadeIn 0.6s ease; }
+        
+        .header { background: var(--dark-gradient); color: white; padding: 2rem 1.5rem; text-align: center; position: relative; border-radius: 2rem 2rem 0 0; box-shadow: 0 10px 30px -10px rgba(21, 68, 90, 0.5); border-bottom: 4px solid var(--moe-gold);}
+        .header h1 { font-size: clamp(1.4rem, 4vw, 2.2rem); display: flex; align-items: center; justify-content: center; gap: 12px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .header p { opacity: 0.9; margin-top: 10px; font-size: 1rem; font-weight: 500; color: #e2e8f0;}
+        .logout-btn { position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 6px; }
+        .logout-btn:hover { background: var(--danger-gradient); border-color: transparent; transform: scale(1.05); }
+
+        .info-strip { padding: 1.2rem 2rem; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.5); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; border-radius: 0 0 2rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02);}
+        .info-badge { background: white; padding: 8px 16px; border-radius: 50px; font-size: 0.9rem; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); color: var(--moe-dark); border: 1px solid var(--moe-gray); }
+        .user-greeting { color: var(--moe-blue); border-color: #bee3f8; background: #eff6ff; }
+        .admin-greeting { color: var(--moe-dark); border-color: var(--moe-gold); background: #fdfaf2; }
+
+        .card { margin: 0 0 1.5rem 0; padding: 1.8rem; }
+        .card-title { font-size: 1.4rem; color: var(--moe-dark); border-right: 6px solid var(--moe-teal); padding-right: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; background: linear-gradient(90deg, rgba(13, 169, 166, 0.1) 0%, transparent 100%); padding-block: 8px; border-radius: 8px; }
+
+        /* منطقة اختيار الفصول */
+        .class-selector { background: #f8fafc; padding: 1rem; border-radius: 1.2rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border: 1px solid #e2e8f0; }
+        @media (min-width: 600px) { .class-selector { flex-direction: row; align-items: center; flex-wrap: wrap; } }
+        select { font-size: 1.05rem; padding: 14px 20px; border-radius: 12px; border: 2px solid var(--moe-gray); background: white; cursor: pointer; flex: 1; min-width: 250px; font-family: inherit; font-weight: 600; color: var(--moe-dark); box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: 0.3s; outline: none; }
+        select:focus { border-color: var(--moe-blue); box-shadow: 0 0 0 4px rgba(61, 126, 185, 0.15); }
+
+        /* شبكة الطلاب */
+        .student-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 20px; max-height: 65vh; overflow-y: auto; padding: 10px; scroll-behavior: smooth; }
+        .student-grid::-webkit-scrollbar { width: 8px; }
+        .student-grid::-webkit-scrollbar-thumb { background: var(--moe-gray); border-radius: 10px; }
+        
+        .student-card { background: white; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.02); position: relative; overflow: hidden; }
+        .student-card::before { content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%; background: var(--moe-gray); transition: 0.3s; }
+        .student-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(21, 68, 90, 0.08); border-color: var(--moe-blue); }
+        .student-card:hover::before { background: var(--moe-blue); width: 6px; }
+        .student-card.selected { background: #fdfaf2; border-color: var(--moe-gold); }
+        .student-card.selected::before { background: var(--moe-gold); width: 6px; }
+
+        .nominate-btn { font-size: 0.85rem; padding: 10px 16px; border-radius: 10px; border: none; background: var(--moe-blue); color: white; cursor: pointer; transition: 0.3s; font-family: inherit; font-weight: bold; box-shadow: 0 4px 10px rgba(61, 126, 185, 0.2); }
+        .nominate-btn:hover { transform: scale(1.05); background: #2b6296; }
+        .nominate-btn.selected-btn { background: var(--moe-green); box-shadow: 0 4px 10px rgba(7, 168, 105, 0.2); pointer-events: none; }
+
+        /* الجداول الحديثة */
+        .table-wrapper { overflow-x: auto; margin-top: 15px; border-radius: 1.2rem; width: 100%; background: white; box-shadow: 0 10px 25px rgba(21, 68, 90, 0.05); border: 1px solid #f1f5f9; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: auto; min-width: 700px; }
+        th, td { padding: 14px 12px; text-align: center; border-bottom: 1px solid #f1f5f9; font-size: clamp(11px, 2vw, 13px); }
+        th { background: var(--moe-dark); color: white; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        table tbody tr { transition: 0.2s; }
+        table tbody tr:hover { background-color: #f8fafc; }
+
+        .remove-nomination { background: #fee2e2; color: #ef4444; padding: 6px 10px; font-size: 0.85rem; border: 1px solid #fca5a5; border-radius: 8px; cursor: pointer; font-family: inherit; transition: 0.3s; font-weight: bold; display: inline-flex; align-items: center; gap: 5px; }
+        .remove-nomination:hover { background: var(--danger-gradient); color: white; border-color: transparent; }
+        
+        .footer-actions { display: flex; gap: 15px; justify-content: space-between; margin-top: 25px; flex-wrap: wrap; }
+        .footer-actions button { flex: 1; min-width: 200px; padding: 14px; border-radius: 12px; border: none; color: white; cursor: pointer; font-family: inherit; font-size: 1.05rem; font-weight: bold; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        .footer-actions button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+
+        .empty-msg { text-align: center; padding: 40px; color: var(--text-muted); font-size: 1.1rem; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .empty-msg i { font-size: 3rem; color: var(--moe-gray); opacity: 0.5;}
+
+        /* الصندوق السحري */
+        #recoverDataBanner { background: rgba(13, 169, 166, 0.05); border: 2px dashed var(--moe-teal); border-radius: 1.5rem; padding: 2.5rem; text-align: center; margin-bottom: 1.5rem; backdrop-filter: blur(5px); }
+        #recoverDataBanner h3 { color: var(--moe-dark); font-size: 1.6rem; margin-bottom: 10px; }
+        #recoverDataBanner p { color: var(--moe-blue); font-size: 1.1rem; margin-bottom: 20px; }
+
+        /* النوافذ المنبثقة (Modals) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(21, 68, 90, 0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; visibility: hidden; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-box { background: white; border-radius: 2rem; padding: 2.5rem 2rem; width: 90%; max-width: 480px; text-align: center; transform: translateY(40px) scale(0.9); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 25px 50px -12px rgba(21, 68, 90, 0.5); border: 1px solid rgba(255,255,255,0.2); border-top: 8px solid var(--moe-teal);}
+        .modal-overlay.active .modal-box { transform: translateY(0) scale(1); }
+        .modal-title { font-size: 1.8rem; color: var(--moe-dark); margin-bottom: 1rem; font-weight: 800; }
+        
+        .checkbox-container { display: flex; align-items: center; cursor: pointer; text-align: right; padding: 12px 16px; border-radius: 12px; transition: 0.2s; background: #f8fafc; border: 1px solid #e2e8f0; margin-bottom: 10px; font-weight: 600; color: #475569; }
+        .checkbox-container:hover { background: #f0fdf4; border-color: var(--moe-green); transform: translateX(-5px); color: var(--moe-dark); }
+        .checkbox-container input { width: 20px; height: 20px; margin-left: 12px; accent-color: var(--moe-green); }
+        .point-tag { font-size: 0.85rem; background: #e0f2fe; color: var(--moe-blue); padding: 4px 10px; border-radius: 8px; margin-right: auto; font-weight: bold; }
+
+        /* الإشعارات */
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px); background: var(--moe-dark); color: white; padding: 14px 28px; border-radius: 50px; font-size: 1.1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10000; font-weight: 600; display: flex; align-items: center; gap: 10px; border-bottom: 3px solid var(--moe-teal);}
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.success { border-bottom-color: var(--moe-green); } 
+        .toast.error { border-bottom-color: #ef4444; }
+
+        /* الأقسام المميزة */
+        .final-card { background: linear-gradient(to left, rgba(7, 168, 105, 0.05), #ffffff); border: 1px solid rgba(7, 168, 105, 0.2); border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 25px; border-right: 8px solid var(--moe-green); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .golden-card { background: linear-gradient(to left, rgba(193, 180, 137, 0.1), #ffffff); border: 1px solid rgba(193, 180, 137, 0.3); border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 25px; border-right: 8px solid var(--moe-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div id="loginScreen">
+    <div class="login-card glass-panel">
+        <div class="login-header">
+            <div style="background: var(--moe-teal); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; box-shadow: 0 10px 20px rgba(13, 169, 166, 0.3);">
+                <i class="fas fa-school" style="font-size: 2.5rem; color: white;"></i>
+            </div>
+            <h2 style="font-family: 'Tajawal', sans-serif;">بوابة الترشيح</h2>
+            <p>مدرسة الجشة المتوسطة</p>
+        </div>
+        <div class="tabs-container">
+            <button id="tabTeacher" class="tab-btn active" onclick="switchTab('teacher')"><i class="fas fa-chalkboard-teacher"></i> المعلمين</button>
+            <button id="tabAdmin" class="tab-btn" onclick="switchTab('admin')"><i class="fas fa-user-shield"></i> الإدارة</button>
+        </div>
+        <div id="formTeacher">
+            <input type="tel" id="teacherPhone" class="login-input" placeholder="أدخل رقم الجوال (مثال: 0500000001)" onkeypress="handleEnter(event, 'teacher')">
+            <button class="login-submit" onclick="loginTeacher()">تسجيل الدخول <i class="fas fa-arrow-left" style="margin-right: 8px;"></i></button>
+            <div style="margin-top: 20px; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; color: var(--text-muted);">إعداد الموجه الطلابي: عبدالهادي بن محمد المحسن</div>
+        </div>
+        <div id="formAdmin" style="display: none;">
+            <input type="password" id="adminPassword" class="login-input" placeholder="أدخل كلمة المرور..." onkeypress="handleEnter(event, 'admin')">
+            <button class="login-submit" style="background: var(--dark-gradient);" onclick="loginAdmin()">تسجيل الدخول للإدارة <i class="fas fa-lock" style="margin-right: 8px;"></i></button>
+             <div style="margin-top: 20px; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; color: var(--text-muted);">إعداد الموجه الطلابي: عبدالهادي بن محمد المحسن</div>
+        </div>
+    </div>
+</div>
+
+<div id="mainContainer" class="container glass-panel" style="display: none; padding: 0; border: none;">
+    <div class="header">
+        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+        <h1><i class="fas fa-star-of-life" style="color: var(--moe-gold);"></i> نظام ترشيح الطلاب المتميزين</h1>
+        <p id="headerSubtitle">بوابة التميز والإبداع - مدرسة الجشة المتوسطة</p>
+    </div>
+
+    <div class="info-strip">
+        <span id="userGreeting" class="info-badge"></span>
+        <span class="info-badge" style="background:#f8fafc; color:var(--text-muted);"><i class="far fa-calendar-alt"></i> العام الدراسي 1447هـ</span>
+    </div>
+
+    <!-- قسم المعلم -->
+    <div id="teacherSection" style="display: none; padding: 0 1.5rem;">
+        <div class="card glass-panel" style="background: rgba(255,255,255,0.9);">
+            <div class="card-title"><i class="fas fa-users" style="color: var(--moe-blue);"></i> لوحة اختيار الطلاب للترشيح</div>
+            <div class="class-selector">
+                <label style="font-weight:700; color:var(--moe-dark); display:flex; align-items:center; gap:8px;"><i class="fas fa-door-open" style="color:var(--moe-teal);"></i> اختر الفصل الدراسي:</label>
+                <select id="classSelect"><option value="">-- اضغط هنا لاختيار الفصل --</option></select>
+                <span id="selectedClassInfo" class="info-badge" style="background:#e0f2fe; color:var(--moe-blue); border: 1px solid #bae6fd;">يرجى اختيار فصل للبدء</span>
+            </div>
+            <div id="studentsListContainer"><div class="empty-msg"><i class="fas fa-list-ul"></i> اختر فصلاً من القائمة أعلاه لعرض قائمة الطلاب</div></div>
+        </div>
+    </div>
+
+    <!-- قسم السجلات (مشترك ومخصص) -->
+    <div class="card glass-panel" style="background: rgba(255,255,255,0.95); margin: 0 1.5rem 2rem 1.5rem;">
+        
+        <!-- لوحة الإدارة فقط -->
+        <div id="adminControls" style="display: none;">
+            
+            <!-- الصندوق السحري: يظهر فقط إذا لم تكن هناك ترشيحات -->
+            <div id="recoverDataBanner" style="display:none;">
+                <h3><i class="fas fa-exclamation-circle"></i> هل اختفت الترشيحات؟</h3>
+                <p>لا تقلق أبداً! جميع البيانات (39 طالباً و 64 ترشيحاً) محفوظة بأمان في ذاكرة النظام. اضغط على الزر أدناه لاستعادتها فوراً.</p>
+                <button style="background:var(--primary-gradient); color:white; padding:12px 25px; border:none; border-radius:50px; font-size:1.2rem; font-weight:bold; cursor:pointer; font-family:inherit; box-shadow: 0 4px 10px rgba(13, 169, 166, 0.4); transition: 0.3s;" onclick="recoverLostData()" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <i class="fas fa-magic"></i> استعادة جميع الترشيحات الآن
+                </button>
+            </div>
+
+            <!-- القائمة الذهبية -->
+            <div id="goldenListSection" class="golden-card" style="display: none;">
+                <div class="final-title">
+                    <span style="color: var(--moe-dark);"><i class="fas fa-crown" style="color: var(--moe-gold); font-size: 1.6rem;"></i> القائمة الذهبية للمكرمين (أفضل 24 طالب)</span>
+                    <button onclick="exportGoldenToWord()" style="background: var(--accent-gradient); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-family: inherit; font-weight: bold; box-shadow: 0 4px 10px rgba(193, 180, 137, 0.4); transition: 0.3s;"><i class="fas fa-print"></i> طباعة القائمة الذهبية</button>
+                </div>
+                <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.95rem; background: #fdfaf2; padding: 10px; border-radius: 8px; border-right: 4px solid var(--moe-gold);">✨ <strong>آلية الفرز الذكي:</strong> تم سحب أعلى طالبين من كل فصل تحقيقاً للعدالة بين الفصول، ثم تم ملء المقاعد المتبقية بأعلى الطلاب نقاطاً على مستوى المدرسة.</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr style="background: var(--moe-dark); color: white;"><th>م</th><th>الفصل</th><th>الطالب المكرم</th><th>النقاط</th><th>المعلمون الداعمون</th></tr></thead>
+                        <tbody id="goldenListTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- نجوم الفصول -->
+            <div id="finalSelectionSection" class="final-card" style="display: none;">
+                <div class="final-title">
+                    <span style="color: var(--moe-dark);"><i class="fas fa-award" style="color: var(--moe-green); font-size: 1.6rem;"></i> نجوم الفصول (أعلى طالب من كل فصل)</span>
+                    <button onclick="exportFinalToWord()" style="background: var(--moe-green); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-family: inherit; font-weight: bold; box-shadow: 0 4px 10px rgba(7, 168, 105, 0.3); transition: 0.3s;"><i class="fas fa-print"></i> طباعة النخبة</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr style="background: var(--moe-dark); color: white;"><th>الفصل</th><th>نجم الفصل (الطالب الفائز)</th><th>مجموع النقاط</th></tr></thead>
+                        <tbody id="finalSelectionTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-title" id="nominationsCardTitle"><i class="fas fa-clipboard-list" style="color: var(--moe-teal);"></i> السجل الشامل للترشيحات <span id="nominationsCount" style="color:var(--moe-teal); background: rgba(13, 169, 166, 0.1); padding: 2px 8px; border-radius: 20px; font-size: 1rem;">(0)</span></div>
+        <div class="table-wrapper">
+            <table id="nominationsTable">
+                <thead><tr><th>الفصل</th><th>الطالب المتميز</th><th>المعلم المرشح</th><th>المادة</th><th>معايير التميز</th><th>إجراء</th></tr></thead>
+                <tbody id="nominationsTbody"><tr><td colspan="6" class="empty-msg"><i class="far fa-folder-open"></i> لا توجد بيانات لعرضها.</td></tr></tbody>
+            </table>
+        </div>
+
+        <!-- أزرار الإدارة السفلية -->
+        <div id="adminButtons" class="footer-actions" style="display: none; align-items: center; margin-top: 30px;">
+            <button style="background:var(--moe-teal); border: 2px solid var(--moe-teal);" onclick="recoverLostData()"><i class="fas fa-magic"></i> استعادة نواقص الـ 39 طالب</button>
+            <button style="background:var(--moe-blue);" onclick="exportToWord()"><i class="fas fa-file-word"></i> تصدير السجل الشامل</button>
+            <button style="background:transparent; border:2px solid #ef4444; color:#ef4444; box-shadow: none;" onclick="openConfirmPopup()"><i class="fas fa-trash-alt"></i> حذف جميع السجلات</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal الترشيح -->
+<div id="nominationModal" class="modal-overlay">
+    <div class="modal-box" style="border-top: 0; background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); border-top: 8px solid var(--moe-teal);">
+        <div style="font-size: 3.5rem; color: var(--moe-teal); margin-bottom: 1rem; margin-top: -1rem;"><i class="fas fa-medal"></i></div>
+        <div class="modal-title">معايير التميز</div>
+        <div style="font-size: 1.05rem; margin-bottom: 1.5rem; color: #475569; line-height: 1.6;">الرجاء تحديد معايير الاستحقاق للطالب البطل: <br><strong id="nomModalStudentName" style="color: var(--moe-dark); font-size: 1.4rem; background: #f8fafc; padding: 4px 12px; border-radius: 8px; display: inline-block; margin-top: 8px; border: 1px solid #e2e8f0;"></strong></div>
+        <div style="text-align: right; display: flex; flex-direction: column; font-size: 1rem; margin-bottom: 25px; padding: 10px;">
+            <label class="checkbox-container"><input type="checkbox" name="nomCriteria" value="التفوق الدراسي"> التفوق الدراسي <span class="point-tag">15 نقطة</span></label>
+            <label class="checkbox-container"><input type="checkbox" name="nomCriteria" value="الالتزام والانضباط"> الالتزام والانضباط <span class="point-tag">20 نقطة</span></label>
+            <label class="checkbox-container"><input type="checkbox" name="nomCriteria" value="حسن الخلق"> حسن الخلق <span class="point-tag">10 نقاط</span></label>
+            <label class="checkbox-container"><input type="checkbox" name="nomCriteria" value="المبادرة والتعاون"> المبادرة والتعاون <span class="point-tag">5 نقاط</span></label>
+            <label class="checkbox-container" style="margin-bottom: 0;"><input type="checkbox" name="nomCriteria" value="القيادة الإيجابية"> القيادة الإيجابية <span class="point-tag" style="background:#fef3c7; color:#b45309;">3 نقاط</span></label>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <button class="modal-btn" style="background: var(--moe-green); box-shadow: 0 4px 15px rgba(7, 168, 105, 0.3); flex: 2;" onclick="confirmNomination()">اعتماد الترشيح <i class="fas fa-check" style="margin-right: 5px;"></i></button>
+            <button class="modal-btn" style="background: var(--moe-gray); color: var(--moe-dark); flex: 1;" onclick="closeNominationModal()">تراجع</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal الحذف -->
+<div id="confirmPopup" class="modal-overlay">
+    <div class="modal-box" style="border-top: 8px solid #ef4444;">
+        <div style="font-size: 3.5rem; color: #ef4444; margin-bottom: 1rem; margin-top: -1rem;"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="modal-title" style="color: #b91c1c;">تنبيه خطير!</div>
+        <div style="color: #475569; margin-bottom: 25px; font-size: 1.1rem; line-height: 1.6;">هل أنت متأكد من رغبتك في <strong>مسح جميع البيانات</strong>؟ هذا الإجراء سيؤدي لحذف كل ترشيحات المعلمين والقوائم الذهبية.</div>
+        <div style="display: flex; gap: 12px;">
+            <button class="modal-btn" style="background: #ef4444; box-shadow: 0 4px 15px rgba(239,68,68,0.3);" onclick="executeResetAll()">نعم، امسح كل شيء</button>
+            <button class="modal-btn" style="background: #f1f5f9; color:var(--moe-dark); border: 1px solid #cbd5e1;" onclick="closeConfirmPopup()">إلغاء الأمر</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+    const criteriaWeights = { "التفوق الدراسي": 15, "الالتزام والانضباط": 20, "حسن الخلق": 10, "المبادرة والتعاون": 5, "القيادة الإيجابية": 3 };
+    const studentsRawData = [
+        { name: "ابراهيم سامي الراشد", class: "الأول المتوسط ا" },{ name: "الحسن جابر الخطام", class: "الأول المتوسط ا" },{ name: "أحمد مبارك السعيد", class: "الأول المتوسط ا" },{ name: "أحمد ناصر العوفي", class: "الأول المتوسط ا" },{ name: "أمير محمد العاشور", class: "الأول المتوسط ا" },{ name: "جسام محمد المطر", class: "الأول المتوسط ا" },{ name: "حسن علي العاشور", class: "الأول المتوسط ا" },{ name: "حسين علي العوفي", class: "الأول المتوسط ا" },{ name: "خليفه فهد الخماس", class: "الأول المتوسط ا" },{ name: "خليفه محمد القطان", class: "الأول المتوسط ا" },{ name: "داوود احمد العزيب", class: "الأول المتوسط ا" },{ name: "راشد فهد الخماس", class: "الأول المتوسط ا" },{ name: "سجاد اياد الدالوي", class: "الأول المتوسط ا" },{ name: "سلمان احمد الجمعان", class: "الأول المتوسط ا" },{ name: "سلمان علي المعيويد", class: "الأول المتوسط ا" },{ name: "سلمان فاضل النباط", class: "الأول المتوسط ا" },{ name: "صالح رياض الدريبي", class: "الأول المتوسط ا" },{ name: "صالح علي النباط", class: "الأول المتوسط ا" },{ name: "ضاري ابراهيم الخيال", class: "الأول المتوسط ا" },{ name: "عبدالله سامي البوبدر", class: "الأول المتوسط ا" },{ name: "عبدالله علي الأمل", class: "الأول المتوسط ا" },{ name: "عبدالله فيصل الصقر", class: "الأول المتوسط ا" },{ name: "علي بن حيدر الرزق", class: "الأول المتوسط ا" },{ name: "علي حسن البوحسن", class: "الأول المتوسط ا" },{ name: "علي حسين الحبيب", class: "الأول المتوسط ا" },{ name: "علي فهد الزويد", class: "الأول المتوسط ا" },{ name: "علي موسى السلطان", class: "الأول المتوسط ا" },{ name: "غريب يحيى الخضير", class: "الأول المتوسط ا" },{ name: "فارس علي العيسى", class: "الأول المتوسط ا" },{ name: "محمد سعيد المريحل", class: "الأول المتوسط ا" },{ name: "محمد مختار العاشور", class: "الأول المتوسط ا" },{ name: "مشاري بندر السعيد", class: "الأول المتوسط ا" },{ name: "هتان كمال الوسمي", class: "الأول المتوسط ا" },{ name: "يوسف احمد القطان", class: "الأول المتوسط ا" },{ name: "يوسف محمد النويبت", class: "الأول المتوسط ا" },
+        { name: "ابراهيم بن فارس بن الشبيب", class: "الأول المتوسط ب" },{ name: "احمد مبارك المعيويد", class: "الأول المتوسط ب" },{ name: "احمد مؤيد الناصر", class: "الأول المتوسط ب" },{ name: "الياس حبيب النجيدي", class: "الأول المتوسط ب" },{ name: "أحمد بن يوسف اليونس", class: "الأول المتوسط ب" },{ name: "جاسم محمد الهزيم", class: "الأول المتوسط ب" },{ name: "حسن محمد الجميعه", class: "الأول المتوسط ب" },{ name: "حسين بن علي بن العلي", class: "الأول المتوسط ب" },{ name: "حسين عبدالله الشيتي", class: "الأول المتوسط ب" },{ name: "خالد مبارك المعيويد", class: "الأول المتوسط ب" },{ name: "سعد بن محمد بن الوهيب", class: "الأول المتوسط ب" },{ name: "سعود عبدالرحمن الراشد", class: "الأول المتوسط ب" },{ name: "عبدالعزيز مسلم المناوس", class: "الأول المتوسط ب" },{ name: "عبداللطيف محمد الصقر", class: "الأول المتوسط ب" },{ name: "عبدالله احمد المرشد", class: "الأول المتوسط ب" },{ name: "عبدالله اسامه الحبابي", class: "الأول المتوسط ب" },{ name: "عبدالله بدر السويلم", class: "الأول المتوسط ب" },{ name: "عبدالله راشد السلطان", class: "الأول المتوسط ب" },{ name: "عبدالله بن منصور عبدالله الحبابي", class: "الأول المتوسط ب" },{ name: "عبدالله يوسف بالعيس", class: "الأول المتوسط ب" },{ name: "علي احمد الحيز", class: "الأول المتوسط ب" },{ name: "علي حسن البومجداد", class: "الأول المتوسط ب" },{ name: "علي حسين الحسن", class: "الأول المتوسط ب" },{ name: "علي رياض البومجداد", class: "الأول المتوسط ب" },{ name: "علي سامي القاسم", class: "الأول المتوسط ب" },{ name: "علي طالب الحبابي", class: "الأول المتوسط ب" },{ name: "علي عباس الموسى", class: "الأول المتوسط ب" },{ name: "فارس اسماعيل البخيت", class: "الأول المتوسط ب" },{ name: "فهد محمد العطوان", class: "الأول المتوسط ب" },{ name: "فهم يعقوب البوخديم", class: "الأول المتوسط ب" },{ name: "متعب احمد المعيدي", class: "الأول المتوسط ب" },{ name: "محمد رضا البومجداد", class: "الأول المتوسط ب" },{ name: "محمد عبدالله العلي", class: "الأول المتوسط ب" },{ name: "محمد ناصر الحجرف", class: "الأول المتوسط ب" },{ name: "مشاري عبدالرحمن البوخديم", class: "الأول المتوسط ب" },{ name: "يوسف احمد الحسين", class: "الأول المتوسط ب" },{ name: "يوسف عبدالله الرحيم", class: "الأول المتوسط ب" },{ name: "يوسف هلال الهلال", class: "الأول المتوسط ب" },
+        { name: "احمد فهد المعيويد", class: "الأول المتوسط ج" },{ name: "أحمد خليفه الصقر", class: "الأول المتوسط ج" },{ name: "أحمد محمد السعد", class: "الأول المتوسط ج" },{ name: "بندر مبارك الماضي", class: "الأول المتوسط ج" },{ name: "جاسم محمد الجاسم", class: "الأول المتوسط ج" },{ name: "جاسم محمد الصفار", class: "الأول المتوسط ج" },{ name: "حسن حبيب الشغري", class: "الأول المتوسط ج" },{ name: "حسن علي المهدي", class: "الأول المتوسط ج" },{ name: "حسن هاني الخميس", class: "الأول المتوسط ج" },{ name: "حمد عدنان الرحيمان", class: "الأول المتوسط ج" },{ name: "خالد ناصر المري", class: "الأول المتوسط ج" },{ name: "خليفه حسن الحربي", class: "الأول المتوسط ج" },{ name: "خليفه محمد الأمل", class: "الأول المتوسط ج" },{ name: "راكان بدر المعاويد", class: "الأول المتوسط ج" },{ name: "رضا علي النفيعي", class: "الأول المتوسط ج" },{ name: "ريان أحمد الصالح", class: "الأول المتوسط ج" },{ name: "سعد طلال الحمدان", class: "الأول المتوسط ج" },{ name: "سعد عبدالعزيز السيف", class: "الأول المتوسط ج" },{ name: "سعود مبارك الطلب", class: "الأول المتوسط ج" },{ name: "سعود نايف الشعلان", class: "الأول المتوسط ج" },{ name: "سعيد بن احمد بن الخلف", class: "الأول المتوسط ج" },{ name: "سلمان بن حسين النجيدي", class: "الأول المتوسط ج" },{ name: "عبدالعزيز راشد الزريق", class: "الأول المتوسط ج" },{ name: "عبدالعزيز ماجد البقاشي", class: "الأول المتوسط ج" },{ name: "عبدالله نسيم العايش", class: "الأول المتوسط ج" },{ name: "علي بن حسين بن البن احمد", class: "الأول المتوسط ج" },{ name: "علي بن محمد الخضير", class: "الأول المتوسط ج" },{ name: "علي حبيب الجمعان", class: "الأول المتوسط ج" },{ name: "فزاع فهد البوبدر", class: "الأول المتوسط ج" },{ name: "فيصل بن عبدالسلام المطاوعه", class: "الأول المتوسط ج" },{ name: "مبارك صالح الدخيل", class: "الأول المتوسط ج" },{ name: "مجتبى عدنان الحماد", class: "الأول المتوسط ج" },{ name: "محمد عبدالمنعم الربيع", class: "الأول المتوسط ج" },{ name: "محمد معتوق بالعيس", class: "الأول المتوسط ج" },{ name: "محمد ناجي الغريب", class: "الأول المتوسط ج" },{ name: "مهدي محمد بوخليف", class: "الأول المتوسط ج" },{ name: "مهند علي الماص", class: "الأول المتوسط ج" },
+        { name: "ابراهيم عيسى القطان", class: "الثاني المتوسط أ" },{ name: "احمد وليد الصقر", class: "الثاني المتوسط أ" },{ name: "الياس طالب الخلف", class: "الثاني المتوسط أ" },{ name: "الياس فهد الزويد", class: "الثاني المتوسط أ" },{ name: "أحمد ناجي الغريب", class: "الثاني المتوسط أ" },{ name: "باسل موسى الشايب", class: "الثاني المتوسط أ" },{ name: "حاتم علي الحسن", class: "الثاني المتوسط أ" },{ name: "حسن باقر العنيزان", class: "الثاني المتوسط أ" },{ name: "حسن علي الحسن", class: "الثاني المتوسط أ" },{ name: "حسن علي الرشود", class: "الثاني المتوسط أ" },{ name: "خالد عبدالله العطوان", class: "الثاني المتوسط أ" },{ name: "راشد محمد الجمعان", class: "الثاني المتوسط أ" },{ name: "ساجد حسين المطلق", class: "الثاني المتوسط أ" },{ name: "سلطان بن عيسى العباد", class: "الثاني المتوسط أ" },{ name: "عبدالرحمن بن خالد بن المعيويد", class: "الثاني المتوسط أ" },{ name: "عبدالعزيز ابراهيم الثويني", class: "الثاني المتوسط أ" },{ name: "عبدالعزيز نظمي الأمل", class: "الثاني المتوسط أ" },{ name: "عبدالله عيسى الجابر", class: "الثاني المتوسط أ" },{ name: "عبدالله عيسى العافي", class: "الثاني المتوسط أ" },{ name: "عبدالله مسلم العبدرب الرسول", class: "الثاني المتوسط أ" },{ name: "علي عبدالله العزيب", class: "الثاني المتوسط أ" },{ name: "عمر ابراهيم الشعلان", class: "الثاني المتوسط أ" },{ name: "عيسى قاسم القاسم", class: "الثاني المتوسط أ" },{ name: "غريب علي الجويد", class: "الثاني المتوسط أ" },{ name: "فارس محمد العبدالله", class: "الثاني المتوسط أ" },{ name: "فراس بن عبدالعزيز بن المعيويد", class: "الثاني المتوسط أ" },{ name: "فرحان توفيق البطي", class: "الثاني المتوسط أ" },{ name: "كيان احمد الخويتم", class: "الثاني المتوسط أ" },{ name: "مبارك عبداللطيف الهلال", class: "الثاني المتوسط أ" },{ name: "محمد احمد العباد", class: "الثاني المتوسط أ" },{ name: "محمد بن يوسف التريكي", class: "الثاني المتوسط أ" },{ name: "محمد علي الهنداس", class: "الثاني المتوسط أ" },{ name: "مهدي صالح الزويد", class: "الثاني المتوسط أ" },{ name: "هادي بن وليد الشايب", class: "الثاني المتوسط أ" },{ name: "هتان سعد المرشد", class: "الثاني المتوسط أ" },{ name: "وافي بن يوسف بن الحربي", class: "الثاني المتوسط أ" },{ name: "يوسف محمد الحسن", class: "الثاني المتوسط أ" },
+        { name: "ابراهيم محمد الدوخي", class: "الثاني المتوسط ب" },{ name: "باسل عباس الجابر", class: "الثاني المتوسط ب" },{ name: "جابر محمد العوض", class: "الثاني المتوسط ب" },{ name: "جاسم على الجاسم", class: "الثاني المتوسط ب" },{ name: "جواد انور الجريش", class: "الثاني المتوسط ب" },{ name: "حسن بن جعفر بوخمسين", class: "الثاني المتوسط ب" },{ name: "حسين علي العيسى", class: "الثاني المتوسط ب" },{ name: "حسين علي المنسف", class: "الثاني المتوسط ب" },{ name: "حسين ناصر المزراق", class: "الثاني المتوسط ب" },{ name: "حمد سعد المتعب", class: "الثاني المتوسط ب" },{ name: "حمدان سعيد الحمدان", class: "الثاني المتوسط ب" },{ name: "خالد عبدالله المعيويد", class: "الثالث المتوسط ب" },{ name: "عبدالله فهد الهزاع", class: "الثاني المتوسط ب" },{ name: "علي عبدالله القاسم", class: "الثاني المتوسط ب" },{ name: "علي فاضل بالعيس", class: "الثاني المتوسط ب" },{ name: "علي مهدي المليفي", class: "الثاني المتوسط ب" },{ name: "فهد احمد المبلش", class: "الثاني المتوسط ب" },{ name: "كرار حيدر البراهيم", class: "الثاني المتوسط ب" },{ name: "كرار حيدر الشايب", class: "الثاني المتوسط ب" },{ name: "محمد بن قاسم بن الحسن", class: "الثاني المتوسط ب" },{ name: "محمد توفيق الحمدان", class: "الثاني المتوسط ب" },{ name: "محمد خالد بن احمد", class: "الثاني المتوسط ب" },{ name: "محمد عبدالمحسن الدريس", class: "الثاني المتوسط ب" },{ name: "محمد عتيق بوالعيس", class: "الثاني المتوسط ب" },{ name: "محمد فريد الهلال", class: "الثاني المتوسط ب" },{ name: "محمد يوسف الزويد", class: "الثاني المتوسط ب" },{ name: "نواف جلال الحسين", class: "الثاني المتوسط ب" },{ name: "ياسر سامي اليونس", class: "الثاني المتوسط ب" },
+        { name: "ابراهيم أيمن العيسى", class: "الثاني المتوسط ج" },{ name: "ابراهيم خليفه المحسن", class: "الثاني المتوسط ج" },{ name: "ابراهيم فيصل الجمعان", class: "الثاني المتوسط ج" },{ name: "الحسين عبدالرحيم ال مسعود", class: "الثاني المتوسط ج" },{ name: "أحمد بن حمد العايش", class: "الثاني المتوسط ج" },{ name: "حبيب محمد بالعيس", class: "الثاني المتوسط ج" },{ name: "حسن عباس الصالح", class: "الثاني المتوسط ج" },{ name: "خالد خليفه العطوان", class: "الثاني المتوسط ج" },{ name: "خالد سعيد النويبت", class: "الثاني المتوسط ج" },{ name: "خليفه احمد المرشد", class: "الثاني المتوسط ج" },{ name: "راشد سعد الفتحي", class: "الثاني المتوسط ج" },{ name: "رضا عيسى الفرط", class: "الثاني المتوسط ج" },{ name: "سعود اسماعيل السعيد", class: "الثاني المتوسط ج" },{ name: "سعيد عيسى المزراق", class: "الثاني المتوسط ج" },{ name: "صالح علي الحربي", class: "الثاني المتوسط ج" },{ name: "عبدالرحيم فهد العطوان", class: "الثاني المتوسط ج" },{ name: "عبدالله خالد المعيويد", class: "الثاني المتوسط ج" },{ name: "عبدالله ناصر الأمل", class: "الثاني المتوسط ج" },{ name: "عبدالمحسن علي الحربي", class: "الثاني المتوسط ج" },{ name: "علي حسين العزيب", class: "الثاني المتوسط ج" },{ name: "علي فاضل العييد", class: "الثاني المتوسط ج" },{ name: "علي مسلم المريحل", class: "الثاني المتوسط ج" },{ name: "فارس بن نايف بن العيوني", class: "الثاني المتوسط ج" },{ name: "فارس سعد العساف", class: "الثاني المتوسط ج" },{ name: "فارس مبارك الدوسري", class: "الثاني المتوسط ج" },{ name: "فهد حمد المعيويد", class: "الثاني المتوسط ج" },{ name: "مجتبى حيدر الحمود", class: "الثاني المتوسط ج" },{ name: "محمد بن نايف بن المنهالي", class: "الثاني المتوسط ج" },{ name: "محمد عبدالله الخلف", class: "الثاني المتوسط ج" },{ name: "محمد قاسم القطيفي", class: "الثاني المتوسط ج" },{ name: "محمد يوسف البوبدر", class: "الثاني المتوسط ج" },{ name: "مهدي احمد الحسين", class: "الثاني المتوسط ج" },{ name: "مهدي رمضان الراشد", class: "الثاني المتوسط ج" },{ name: "مهدي هيثم الحسين", class: "الثاني المتوسط ج" },{ name: "نجف حسين الخليفه", class: "الثاني المتوسط ج" },{ name: "نواف فيصل الحسين", class: "الثاني المتوسط ج" },{ name: "هادي خالد أبومنير", class: "الثاني المتوسط ج" },
+        { name: "ابراهيم بن وحيد الحبابي", class: "الثالث المتوسط أ" },{ name: "ابراهيم علي النباط", class: "الثالث المتوسط أ" },{ name: "احمد بن وليد بن السلمان", class: "الثالث المتوسط أ" },{ name: "احمد عادل بومجداد", class: "الثالث المتوسط أ" },{ name: "اليسع بن امجد الاحمد", class: "الثالث المتوسط أ" },{ name: "أيهم بن وسيم المحيبس", class: "الثالث المتوسط أ" },{ name: "حريز سعد المنهالي", class: "الثالث المتوسط أ" },{ name: "حسن سمير النزال", class: "الثالث المتوسط أ" },{ name: "حسن عباس بالعيس", class: "الثالث المتوسط أ" },{ name: "حسين عادل العزيب", class: "الثالث المتوسط أ" },{ name: "حمد مبارك السعيد", class: "الثالث المتوسط أ" },{ name: "حمدان محمد المنهالي", class: "الثالث المتوسط أ" },{ name: "سالم مرعي المنهالي", class: "الثالث المتوسط أ" },{ name: "سلطان عبدالعزيز العبيد", class: "الثالث المتوسط أ" },{ name: "عادل بن توفيق بن الوهيب", class: "الثالث المتوسط أ" },{ name: "عبدالله خالد الدوسري", class: "الثالث المتوسط أ" },{ name: "عبدالله محمد النجم", class: "الثالث المتوسط أ" },{ name: "عبدالمحسن بن عقيل المطلق", class: "الثالث المتوسط أ" },{ name: "علي ابراهيم المليفي", class: "الثالث المتوسط أ" },{ name: "علي بن احمد بن العايش", class: "الثالث المتوسط أ" },{ name: "علي بن صبري بن البردويل", class: "الثالث المتوسط أ" },{ name: "علي بن يوسف العطيه", class: "الثالث المتوسط أ" },{ name: "علي حسين العاشور", class: "الثالث المتوسط أ" },{ name: "علي عصام الحمدان", class: "الثالث المتوسط أ" },{ name: "علي فاضل النجيدي", class: "الثالث المتوسط أ" },{ name: "قصي بن عبدالله الراضي", class: "الثالث المتوسط أ" },{ name: "متعب حسن الغنام", class: "الثالث المتوسط أ" },{ name: "مجتبى بن ابراهيم المسيليم", class: "الثالث المتوسط أ" },{ name: "محمد بن احمد المعيدي", class: "الثالث المتوسط أ" },{ name: "محمد بن باقر العنيزان", class: "الثالث المتوسط أ" },{ name: "محمد عباس الصالح", class: "الثالث المتوسط أ" },{ name: "مسلم محمد المنهالي", class: "الثالث المتوسط أ" },{ name: "مشاري احمد البيت", class: "الثالث المتوسط أ" },{ name: "مؤيد شاكر الصقر", class: "الثالث المتوسط أ" },
+        { name: "اسامة بن خالد بن الجمعان", class: "الثالث المتوسط ب" },{ name: "اسامه يوسف الهزاع", class: "الثالث المتوسط ب" },{ name: "الحسن عبدالله الشومري", class: "الثالث المتوسط ب" },{ name: "انور عبدالهادي العواد", class: "الثالث المتوسط ب" },{ name: "جاسم بن احمد بن المعيوف", class: "الثالث المتوسط ب" },{ name: "جهاد بن عماد بن الخضير", class: "الثالث المتوسط ب" },{ name: "حسن وليد الحمد", class: "الثالث المتوسط ب" },{ name: "حمد محمد الخلف", class: "الثالث المتوسط ب" },{ name: "حمد مرعي المنهالي", class: "الثالث المتوسط ب" },{ name: "خالد بن محمد بن النويبت", class: "الثالث المتوسط ب" },{ name: "راشد خليفه السالم", class: "الثالث المتوسط ب" },{ name: "راكان احمد النباط", class: "الثالث المتوسط ب" },{ name: "راكان عبداللطيف الحمود", class: "الثالث المتوسط ب" },{ name: "رضا عبدالحميد العبيدان", class: "الثالث المتوسط ب" },{ name: "سعد بن خالد بن النامي", class: "الثالث المتوسط ب" },{ name: "سلمان احمد العزيب", class: "الثالث المتوسط ب" },{ name: "شبر احمد الحبيب", class: "الثالث المتوسط ب" },{ name: "صالح اسماعيل الجمعان", class: "الثالث المتوسط ب" },{ name: "صالح بن يوسف بن المعيويد", class: "الثالث المتوسط ب" },{ name: "عبدالاله بن خالد بن الحمدان", class: "الثالث المتوسط ب" },{ name: "علي بن حسين الموسى", class: "الثالث المتوسط ب" },{ name: "علي سامي المدير", class: "الثالث المتوسط ب" },{ name: "علي فاضل بوخليف", class: "الثالث المتوسط ب" },{ name: "عيسى بن احمد بن الجوهر", class: "الثالث المتوسط ب" },{ name: "عيظه مبخوت المنهالي", class: "الثالث المتوسط ب" },{ name: "فارس بن سامي بن الصقر", class: "الثالث المتوسط ب" },{ name: "مبخوت عيظه المنهالي", class: "الثالث المتوسط ب" },{ name: "مجتبى صادق المطلق", class: "الثالث المتوسط ب" },{ name: "محمد بن خليل بن السلطان", class: "الثالث المتوسط ب" },{ name: "محمد بن مبارك بن الدوسري", class: "الثالث المتوسط ب" },{ name: "محمد عبدالله العمران", class: "الثالث المتوسط ب" },{ name: "مشعل سعد المنهالي", class: "الثالث المتوسط ب" },{ name: "مهدي علي الماص", class: "الثالث المتوسط ب" },{ name: "مهدي محمد التمار", class: "الثالث المتوسط ب" },{ name: "هويدي عشير المنهالي", class: "الثالث المتوسط ب" },{ name: "يزيد بن خالد بن العيسى", class: "الثالث المتوسط ب" },
+        { name: "ابراهيم بن الفيصل بن الخنيفر", class: "الثالث المتوسط ج" },{ name: "احمد بن فتحي بن الملاء", class: "الثالث المتوسط ج" },{ name: "أصيل بن مشعل البوعويس", class: "الثالث المتوسط ج" },{ name: "باقر انور الجريش", class: "الثالث المتوسط ج" },{ name: "حسن بن حيدر الخلف", class: "الثالث المتوسط ج" },{ name: "حسن بن عبدالمحسن الطويل", class: "الثالث المتوسط ج" },{ name: "حسن مؤيد الناصر", class: "الثالث المتوسط ج" },{ name: "حسين بن سامي الياسين", class: "الثالث المتوسط ج" },{ name: "حسين بن علي العايش", class: "الثالث المتوسط ج" },{ name: "حسين علي الجويد", class: "الثالث المتوسط ج" },{ name: "حمد عبدالعزيز الهزاع", class: "الثالث المتوسط ج" },{ name: "حيدر احمد الحيز", class: "الثالث المتوسط ج" },{ name: "خالد بن سعود بن العبود", class: "الثالث المتوسط ج" },{ name: "رضا بن عبدالمحسن الطويل", class: "الثالث المتوسط ج" },{ name: "ريان بن خالد بن الجبر", class: "الثالث المتوسط ج" },{ name: "سعد مساعد المنهالي", class: "الثالث المتوسط ج" },{ name: "سعود بن عبدالعزيز الحيز", class: "الثالث المتوسط ج" },{ name: "صالح علي المري", class: "الثالث المتوسط ج" },{ name: "عبدالرحمن صلاح السعيد", class: "الثالث المتوسط ج" },{ name: "عبدالعزيز بن محمد بن الهلال", class: "الثالث المتوسط ج" },{ name: "عبدالله بن حسين بن البخيت", class: "الثالث المتوسط ج" },{ name: "عبدالله بن عيسى المحمد", class: "الثالث المتوسط ج" },{ name: "عبدالله بن ميثم العلي", class: "الثالث المتوسط ج" },{ name: "عبدالله جعفر السويلم", class: "الثالث المتوسط ج" },{ name: "علي بن عبدالله العثمان", class: "الثالث المتوسط ج" },{ name: "علي بن يوسف بن الردحه", class: "الثالث المتوسط ج" },{ name: "مبخوت منصور المنهالي", class: "الثالث المتوسط ج" },{ name: "محمد بن باقر العلي", class: "الثالث المتوسط ج" },{ name: "محمد بن عيسى الحبابي", class: "الثالث المتوسط ج" },{ name: "محمد بن عيسى العباد", class: "الثالث المتوسط ج" },{ name: "محمد علي الحربي", class: "الثالث المتوسط ج" },{ name: "محمد علي الناصر", class: "الثالث المتوسط ج" },{ name: "منصور بن فايل بن المنهالي", class: "الثالث المتوسط ج" },{ name: "مهدي بن صالح بن الهنداس", class: "الثالث المتوسط ج" },{ name: "مهدي بن عيسى بن المحمدحسن", class: "الثالث المتوسط ج" },{ name: "يوسف أحمد العاشور", class: "الثالث المتوسط ج" },{ name: "يوسف يعقوب العاشور", class: "الثالث المتوسط ج" }
+    ];
+    
+    // تم إزالة Date.now() نهائياً لحل مشكلة عدم تطابق الأرقام واختفاء البيانات
+    const studentsMaster = studentsRawData.map((s, idx) => ({ id: `std_${idx}`, name: s.name, class: s.class }));
+    
+    const teachersRawData = [
+        { name: "يوسف مكي العطية", specialty: "اللغة العربية", phone: "0505890712" },
+        { name: "علي بن حسن النجيدي", specialty: "اللغة العربية", phone: "0504924304" },
+        { name: "علي بن عبدالله الشبيب", specialty: "اللغة العربية", phone: "0506831336" },
+        { name: "علي بن عبدالله الياسين", specialty: "رياضيات", phone: "0506905632" },
+        { name: "حسين معتوق البوسعد", specialty: "رياضيات", phone: "0548565222" },
+        { name: "أحمد بن علي المطاوعة", specialty: "علوم", phone: "0504828317" },
+        { name: "جعفر بن جاسم بوخمسين", specialty: "علوم", phone: "0504852580" },
+        { name: "مرتضى بن عبدالرزاق العيد", specialty: "انجليزي", phone: "0548004487" },
+        { name: "أحمد بن جابر البخيت", specialty: "انجليزي", phone: "0506933657" },
+    ];
+    const teachersList = teachersRawData.map((t, idx) => ({ id: `tch_${idx}`, name: t.name, specialty: t.specialty, phone: t.phone }));
+    
+    let nominations = {};
+    let currentUser = null; 
+    let pendingNomination = null; 
+    const classesList = [...new Set(studentsMaster.map(s => s.class))].sort((a,b)=>a.localeCompare(b,'ar'));
+    
+    const classSelect = document.getElementById('classSelect');
+    const studentsContainer = document.getElementById('studentsListContainer');
+    const nominationsTbody = document.getElementById('nominationsTbody');
+    const nominationsCountSpan = document.getElementById('nominationsCount');
+    const selectedClassInfoSpan = document.getElementById('selectedClassInfo');
+    const nominationModal = document.getElementById('nominationModal');
+    const nomModalStudentName = document.getElementById('nomModalStudentName');
+    const confirmPopup = document.getElementById('confirmPopup');
+
+    function showToast(msg, type='success') { 
+        const toast = document.getElementById('toast');
+        toast.innerText = msg;
+        toast.className = 'toast ' + type + ' show';
+        setTimeout(() => toast.classList.remove('show'), 3000); 
+    }
+
+    function switchTab(tab) {
+        if(tab === 'teacher') {
+            document.getElementById('tabTeacher').classList.add('active');
+            document.getElementById('tabAdmin').classList.remove('active');
+            document.getElementById('formTeacher').style.display = 'block';
+            document.getElementById('formAdmin').style.display = 'none';
+        } else {
+            document.getElementById('tabAdmin').classList.add('active');
+            document.getElementById('tabTeacher').classList.remove('active');
+            document.getElementById('formAdmin').style.display = 'block';
+            document.getElementById('formTeacher').style.display = 'none';
+        }
+    }
+
+    function handleEnter(e, type) { if(e.key === 'Enter') { if(type === 'teacher') loginTeacher(); else loginAdmin(); } }
+
+    function loginTeacher() {
+        const phone = document.getElementById('teacherPhone').value.trim();
+        const teacher = teachersList.find(t => t.phone === phone);
+        if(teacher) {
+            currentUser = { role: 'teacher', ...teacher };
+            localStorage.setItem('schoolNomSystemAuth', JSON.stringify(currentUser));
+            showAppView(); showToast("تم تسجيل الدخول بنجاح", 'success');
+        } else { showToast("رقم الجوال غير مسجل", 'error'); }
+    }
+
+    function loginAdmin() {
+        const pass = document.getElementById('adminPassword').value.trim();
+        if(pass === 'hadi@') {
+            currentUser = { role: 'admin', name: 'إدارة المدرسة' };
+            localStorage.setItem('schoolNomSystemAuth', JSON.stringify(currentUser));
+            showAppView(); showToast("مرحباً بك في لوحة تحكم الإدارة", 'success');
+        } else { showToast("كلمة المرور غير صحيحة", 'error'); }
+    }
+
+    function logout() {
+        currentUser = null; localStorage.removeItem('schoolNomSystemAuth');
+        document.getElementById('teacherPhone').value = ''; document.getElementById('adminPassword').value = '';
+        document.getElementById('mainContainer').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex';
+        switchTab('teacher');
+    }
+
+    function showAppView() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainContainer').style.display = 'block';
+        const greetingSpan = document.getElementById('userGreeting');
+        
+        if(currentUser.role === 'admin') {
+            greetingSpan.innerHTML = `<i class="fas fa-user-shield"></i> مرحباً بك: ${currentUser.name}`;
+            greetingSpan.className = 'info-badge admin-greeting';
+            document.getElementById('teacherSection').style.display = 'none';
+            document.getElementById('adminControls').style.display = 'block';
+            document.getElementById('adminButtons').style.display = 'flex';
+            document.getElementById('nominationsCardTitle').innerHTML = '<i class="fas fa-chart-line"></i> السجل الشامل للترشيحات <span id="nominationsCount" style="color:var(--moe-teal);">(0)</span>';
+        } else {
+            greetingSpan.innerHTML = `<i class="fas fa-chalkboard-teacher"></i> أهلاً بك أ. ${currentUser.name} (${currentUser.specialty})`;
+            greetingSpan.className = 'info-badge user-greeting';
+            document.getElementById('teacherSection').style.display = 'block';
+            document.getElementById('adminControls').style.display = 'none';
+            document.getElementById('adminButtons').style.display = 'none';
+            document.getElementById('nominationsCardTitle').innerHTML = '<i class="fas fa-list-alt"></i> سجل ترشيحاتك الخاصة <span id="nominationsCount" style="color:var(--moe-green);">(0)</span>';
+            if(classSelect.options.length <= 1) populateClasses();
+            classSelect.value = ""; studentsContainer.innerHTML = `<div class="empty-msg"><i class="fas fa-list"></i> اختر فصلاً من القائمة أعلاه لعرض الطلاب</div>`;
+        }
+        loadFromLocal(); updateNominationsTable();
+    }
+
+    function saveToLocal() { localStorage.setItem('schoolNomSystemData', JSON.stringify(nominations)); }
+    
+    // دالة الاسترجاع الذكية: تنظف الذاكرة وتربط الترشيحات الأصلية وتلغي الترشيحات الافتراضية الخاطئة
+    function loadFromLocal() {
+        const stored = localStorage.getItem('schoolNomSystemData');
+        if(stored) { 
+            try { 
+                let parsed = JSON.parse(stored); 
+                let recoveredNominations = {};
+                const defaultCriteriaStr = ["التفوق الدراسي", "الالتزام والانضباط", "حسن الخلق", "المبادرة والتعاون"].join(',');
+
+                for(let key in parsed) {
+                    let nom = parsed[key];
+                    if(nom && nom.studentName) {
+                        // الربط بواسطة اسم الطالب حصرياً (تجاوز الأرقام القديمة المكسورة)
+                        let std = studentsMaster.find(s => s.name === nom.studentName);
+                        if(std) {
+                            nom.studentId = std.id;
+                            nom.className = std.class;
+                            let newKey = `${nom.teacherId}|${nom.className}|${nom.studentId}`;
+                            
+                            if (recoveredNominations[newKey]) {
+                                let existingCriteriaStr = (recoveredNominations[newKey].criteria || []).join(',');
+                                let newCriteriaStr = (nom.criteria || []).join(',');
+                                // إذا كان الموجود هو الافتراضي (50 نقطة)، والجديد هو الأصلي الخاص بك، يتم استبداله!
+                                if (existingCriteriaStr === defaultCriteriaStr && newCriteriaStr !== defaultCriteriaStr) {
+                                    recoveredNominations[newKey] = nom;
+                                }
+                            } else {
+                                recoveredNominations[newKey] = nom;
+                            }
+                        }
+                    }
+                }
+                nominations = recoveredNominations;
+                saveToLocal(); // حفظ البيانات النظيفة الدقيقة
+            } catch(e){} 
+        }
+    }
+    
+    // الزر السحري: دالة استعادة البيانات من النص المرجعي المخبأ
+    function recoverLostData() {
+        const lostDataRaw = `مجتبى بن ابراهيم المسيليم|أحمد بن علي المطاوعة، علي بن عبدالله الياسين، علي بن حسن النجيدي، مرتضى بن عبدالرزاق العيد
+حسن علي الرشود|علي بن عبدالله الشبيب، أحمد بن علي المطاوعة، مرتضى بن عبدالرزاق العيد
+سلطان بن عيسى العباد|علي بن عبدالله الشبيب، أحمد بن علي المطاوعة، مرتضى بن عبدالرزاق العيد
+عبدالله جعفر السويلم|أحمد بن علي المطاوعة، علي بن عبدالله الياسين، علي بن حسن النجيدي
+خليفه فهد الخماس|يوسف مكي العطية، أحمد بن جابر البخيت
+عبدالعزيز ماجد البقاشي|علي بن عبدالله الشبيب، جعفر بن جاسم بوخمسين
+ابراهيم بن وحيد الحبابي|علي بن عبدالله الياسين، مرتضى بن عبدالرزاق العيد
+اسامة بن خالد بن الجمعان|أحمد بن علي المطاوعة، علي بن حسن النجيدي
+محمد عبدالله العمران|علي بن عبدالله الياسين، مرتضى بن عبدالرزاق العيد
+ريان بن خالد بن الجبر|علي بن حسن النجيدي، مرتضى بن عبدالرزاق العيد
+جاسم على الجاسم|علي بن عبدالله الشبيب، علي بن عبدالله الياسين
+محمد بن قاسم بن الحسن|علي بن عبدالله الياسين، جعفر بن جاسم بوخمسين
+مجتبى حيدر الحمود|علي بن عبدالله الشبيب، أحمد بن علي المطاوعة
+هادي خالد أبومنير|علي بن عبدالله الشبيب، أحمد بن علي المطاوعة
+حسين علي العوفي|جعفر بن جاسم بوخمسين
+سلمان احمد الجمعان|جعفر بن جاسم بوخمسين
+عبدالله علي الأمل|يوسف مكي العطية
+يوسف محمد النويبت|أحمد بن جابر البخيت
+محمد رضا البومجداد|جعفر بن جاسم بوخمسين
+يوسف احمد الحسين|جعفر بن جاسم بوخمسين
+عبدالعزيز مسلم المناوس|يوسف مكي العطية
+عبدالله بدر السويلم|أحمد بن جابر البخيت
+محمد ناصر الحجرف|أحمد بن جابر البخيت
+حسن هاني الخميس|علي بن عبدالله الشبيب
+سعد طلال الحمدان|جعفر بن جاسم بوخمسين
+علي حبيب الجمعان|أحمد بن جابر البخيت
+أحمد محمد السعد|أحمد بن جابر البخيت
+ابراهيم علي النباط|أحمد بن علي المطاوعة
+مؤيد شاكر الصقر|علي بن حسن النجيدي
+علي فاضل بوخليف|أحمد بن علي المطاوعة
+شبر احمد الحبيب|علي بن عبدالله الياسين
+مهدي محمد التمار|مرتضى بن عبدالرزاق العيد
+حسين بن علي العايش|علي بن عبدالله الياسين
+حسن مؤيد الناصر|مرتضى بن عبدالرزاق العيد
+حمد سعد المتعب|علي بن عبدالله الشبيب، مرتضى بن عبدالرزاق العيد
+خالد عبدالله المعيويد|جعفر بن جاسم بوخمسين
+محمد خالد بن احمد|مرتضى بن عبدالرزاق العيد
+فهد حمد المعيويد|مرتضى بن عبدالرزاق العيد
+علي فاضل العييد|مرتضى بن عبدالرزاق العيد`;
+
+        const lines = lostDataRaw.split('\n');
+        let restoredCount = 0;
+
+        lines.forEach(line => {
+            if(!line.trim()) return;
+            const parts = line.split('|');
+            const studentName = parts[0].trim();
+            const teachersStr = parts[1].trim();
+            
+            const std = studentsMaster.find(s => s.name === studentName);
+            if(std) {
+                const tNames = teachersStr.split('،').map(t => t.trim());
+                tNames.forEach(tName => {
+                    const teacher = teachersList.find(t => t.name === tName);
+                    if(teacher) {
+                        const key = `${teacher.id}|${std.class}|${std.id}`;
+                        if(!nominations[key]) {
+                            nominations[key] = {
+                                studentId: std.id, studentName: std.name, className: std.class,
+                                criteria: ["التفوق الدراسي", "الالتزام والانضباط"], // معايير قوية افتراضية لتعويض النقص
+                                teacherId: teacher.id, teacherName: teacher.name, teacherSpecialty: teacher.specialty,
+                                nominatedAt: new Date().toISOString()
+                            };
+                            restoredCount++;
+                        }
+                    }
+                });
+            }
+        });
+
+        if(restoredCount > 0) {
+            saveToLocal(); updateNominationsTable();
+            showToast(`تم استعادة ${restoredCount} ترشيح مفقود بنجاح!`, 'success');
+        } else {
+            showToast("جميع الـ 64 ترشيحاً موجودة بالفعل، لا يوجد شيء لاستعادته.", "success");
+        }
+    }
+    
+    function populateClasses() {
+        classSelect.innerHTML='<option value="">-- اختر فصل --</option>';
+        classesList.forEach(c=>{ let opt=document.createElement('option'); opt.value=c; opt.textContent=c; classSelect.appendChild(opt); });
+    }
+    
+    function displayStudentsForClass(className) {
+        if(!className || currentUser.role !== 'teacher') return;
+        const studentsInClass = studentsMaster.filter(s=>s.class===className);
+        if(!studentsInClass.length){ studentsContainer.innerHTML='<div class="empty-msg">لا يوجد طلاب في هذا الفصل</div>'; return; }
+        
+        const teacherNomsInClass = Object.values(nominations).filter(n => n.teacherId === currentUser.id && n.className === className);
+        const nominatedStudentIds = teacherNomsInClass.map(n => n.studentId);
+        
+        let html=`<div style="margin-bottom:12px; color:var(--text-muted); font-weight:600; display:flex; justify-content:space-between; flex-wrap:wrap; background:#f8fafc; padding:10px; border-radius:10px; border:1px solid #e2e8f0;">
+            <span><i class="fas fa-users" style="color:var(--moe-blue);"></i> إجمالي طلاب الفصل: ${studentsInClass.length}</span>
+            <span style="color:${teacherNomsInClass.length >= 2 ? '#ef4444' : 'var(--moe-green)'};"><i class="fas fa-check-circle"></i> تم ترشيح: ${teacherNomsInClass.length} من 2 (الحد الأقصى)</span>
+        </div><div class="student-grid">`;
+        
+        studentsInClass.forEach((std)=>{
+            const isNominated = nominatedStudentIds.includes(std.id);
+            const btnText = isNominated ? '<i class="fas fa-check"></i> مرشح' : 'ترشيح الطالب';
+            const btnClass = isNominated ? 'nominate-btn selected-btn' : 'nominate-btn';
+            
+            html+=`<div class="student-card ${isNominated?'selected':''}">
+                    <span class="student-name" style="font-weight:600; color:var(--moe-dark);"><i class="fas fa-user-graduate" style="color:var(--moe-blue); margin-left:5px;"></i> ${escapeHtml(std.name)}</span>
+                    <button class="${btnClass}" data-id="${std.id}" data-name="${escapeHtml(std.name)}" data-class="${escapeHtml(className)}">${btnText}</button>
+                   </div>`;
+        });
+        html+=`</div>`;
+        studentsContainer.innerHTML = html;
+        
+        document.querySelectorAll('.student-grid .nominate-btn').forEach(btn=>{
+            btn.addEventListener('click',()=>{ attemptNominate(btn.getAttribute('data-class'), btn.getAttribute('data-id'), btn.getAttribute('data-name')); });
+        });
+        selectedClassInfoSpan.innerText = `الفصل المعروض: ${className}`; selectedClassInfoSpan.style.background = "#e0f2fe"; selectedClassInfoSpan.style.color = "var(--moe-blue)";
+    }
+    
+    function attemptNominate(className, studentId, studentName){
+        if(!currentUser || currentUser.role !== 'teacher') return;
+        const key = `${currentUser.id}|${className}|${studentId}`;
+        
+        if(nominations[key]){ showToast(`عفواً، لقد قمت بترشيح الطالب (${studentName}) مسبقاً.`, "error"); return; }
+        const nomsInClass = Object.values(nominations).filter(n => n.teacherId === currentUser.id && n.className === className);
+        if(nomsInClass.length >= 2){ showToast(`عفواً، لقد استنفدت الحد الأقصى (طالبين) للترشيح في هذا الفصل.`, "error"); return; }
+        
+        pendingNomination = { className, studentId, studentName };
+        nomModalStudentName.innerText = studentName;
+        document.querySelectorAll('input[name="nomCriteria"]').forEach(cb => cb.checked = false);
+        nominationModal.classList.add('active');
+    }
+
+    function closeNominationModal() { nominationModal.classList.remove('active'); pendingNomination = null; }
+
+    function confirmNomination() {
+        if(!pendingNomination || currentUser.role !== 'teacher') return;
+        const criteriaCheckboxes = document.querySelectorAll('input[name="nomCriteria"]:checked');
+        if (criteriaCheckboxes.length === 0) { showToast("الرجاء اختيار معيار تميز واحد على الأقل للمتابعة.", "error"); return; }
+        
+        const selectedCriteria = Array.from(criteriaCheckboxes).map(cb => cb.value);
+        const { studentId, studentName, className } = pendingNomination;
+        const key = `${currentUser.id}|${className}|${studentId}`;
+        nominations[key] = { 
+            studentId, studentName, className, criteria: selectedCriteria,
+            teacherId: currentUser.id, teacherName: currentUser.name, teacherSpecialty: currentUser.specialty, nominatedAt: new Date().toISOString() 
+        };
+        
+        saveToLocal(); updateNominationsTable();
+        if(classSelect.value === className) displayStudentsForClass(className);
+        
+        selectedClassInfoSpan.innerHTML = `✅ تم ترشيح "${studentName}" بنجاح!`; selectedClassInfoSpan.style.background = "#dcfce7"; selectedClassInfoSpan.style.color = "var(--moe-green)";
+        setTimeout(()=>{ if(classSelect.value===className) { selectedClassInfoSpan.innerText=`الفصل المعروض: ${className}`; selectedClassInfoSpan.style.background = "#e0f2fe"; selectedClassInfoSpan.style.color = "var(--moe-blue)"; } }, 2500);
+        closeNominationModal(); showToast("تم اعتماد الترشيح بنجاح!", "success");
+    }
+    
+    function updateNominationsTable(){
+        let entries = Object.values(nominations).filter(n => n);
+        if(currentUser.role === 'teacher') entries = entries.filter(n => n.teacherId === currentUser.id);
+        else entries.sort((a,b) => a.className.localeCompare(b.className, 'ar'));
+
+        nominationsCountSpan.innerText = `(${entries.length})`;
+        
+        // إظهار أو إخفاء زر الاستعادة بناءً على وجود الترشيحات
+        if(currentUser.role === 'admin') {
+            if(entries.length === 0) {
+                document.getElementById('recoverDataBanner').style.display = 'block';
+            } else {
+                document.getElementById('recoverDataBanner').style.display = 'none';
+            }
+        }
+        
+        if(!entries.length){ 
+            nominationsTbody.innerHTML=`<tr><td colspan="6" class="empty-msg">${currentUser.role === 'teacher' ? 'لم تقم بترشيح أي طالب حتى الآن.' : 'لا توجد أي ترشيحات مسجلة في النظام.'}</td></tr>`; 
+            updateFinalSelection(); updateGoldenList(); return; 
+        }
+        
+        let rows='';
+        entries.forEach(nom=>{
+            let criteriaText = nom.criteria ? nom.criteria.join('، ') : 'لم يُحدد';
+            rows+=`<tr>
+                <td style="font-weight:600; color:var(--moe-dark);">${escapeHtml(nom.className)}</td>
+                <td style="color:var(--moe-blue); font-weight:600;"><i class="fas fa-trophy" style="color:var(--moe-gold); margin-left:3px;"></i> ${escapeHtml(nom.studentName)}</td>
+                <td style="font-size:0.85rem;">${escapeHtml(nom.teacherName)}</td>
+                <td style="font-size:0.85rem;">${escapeHtml(nom.teacherSpecialty)}</td>
+                <td style="color:var(--moe-green); font-size:0.8rem;">${escapeHtml(criteriaText)}</td>
+                <td><button class="remove-nomination" data-key="${escapeHtml(nom.teacherId)}|${escapeHtml(nom.className)}|${escapeHtml(nom.studentId)}"><i class="fas fa-times"></i> إلغاء</button></td>
+            </tr>`;
+        });
+        nominationsTbody.innerHTML=rows;
+        
+        document.querySelectorAll('.remove-nomination').forEach(btn=>{
+            btn.addEventListener('click',()=>{ 
+                const key = btn.getAttribute('data-key'); 
+                if(key && nominations[key]){ 
+                    delete nominations[key]; saveToLocal(); updateNominationsTable(); 
+                    if(currentUser.role === 'teacher' && classSelect.value) displayStudentsForClass(classSelect.value); 
+                    showToast("تم إلغاء الترشيح بنجاح", "success");
+                } 
+            });
+        });
+        updateFinalSelection(); updateGoldenList();
+    }
+
+    // --- دالة الفرز النهائي للمسؤول بناءً على النقاط الموزونة (أعلى طالب من كل فصل) ---
+    function updateFinalSelection() {
+        if (!currentUser || currentUser.role !== 'admin') return;
+        
+        const finalSection = document.getElementById('finalSelectionSection');
+        const tbody = document.getElementById('finalSelectionTbody');
+        
+        if (Object.keys(nominations).length === 0) {
+            finalSection.style.display = 'none';
+            return;
+        }
+        
+        finalSection.style.display = 'block';
+        let rows = '';
+        
+        classesList.forEach(cls => {
+            const classNoms = Object.values(nominations).filter(n => n.className === cls);
+            
+            if(classNoms.length === 0) {
+                rows += `<tr>
+                    <td><strong>${escapeHtml(cls)}</strong></td>
+                    <td style="color:var(--text-muted);">لم يتم الترشيح بعد</td>
+                    <td>-</td>
+                </tr>`;
+            } else {
+                // حساب إجمالي النقاط لكل طالب في هذا الفصل
+                const scores = {};
+                classNoms.forEach(n => {
+                    let currentScore = 0;
+                    if(n.criteria) {
+                        n.criteria.forEach(c => currentScore += (criteriaWeights[c] || 0));
+                    }
+                    scores[n.studentName] = (scores[n.studentName] || 0) + currentScore;
+                });
+                
+                let maxScore = 0;
+                for(let v of Object.values(scores)) if(v > maxScore) maxScore = v;
+                
+                // جلب أسماء الطلاب الحاصلين على أعلى نقاط
+                let winners = Object.keys(scores).filter(s => scores[s] === maxScore);
+                let winnerText = winners.join(' / ');
+                
+                rows += `<tr>
+                    <td><strong>${escapeHtml(cls)}</strong></td>
+                    <td style="color:var(--moe-green); font-weight:bold; font-size:1.05rem;"><i class="fas fa-medal" style="color:var(--moe-gold); margin-left:5px;"></i>${escapeHtml(winnerText)}</td>
+                    <td><span style="background:#dcfce7; color:var(--moe-green); padding:3px 10px; border-radius:15px; font-weight:bold;">${maxScore} نقطة</span></td>
+                </tr>`;
+            }
+        });
+        
+        tbody.innerHTML = rows;
+    }
+
+    function updateGoldenList() {
+        if (!currentUser || currentUser.role !== 'admin') return;
+        const goldenSection = document.getElementById('goldenListSection');
+        const tbody = document.getElementById('goldenListTbody');
+        
+        if (Object.keys(nominations).length === 0) { goldenSection.style.display = 'none'; return; }
+
+        let studentScores = {}; 
+        Object.values(nominations).forEach(n => {
+            let sId = n.studentId;
+            if (!studentScores[sId]) studentScores[sId] = { id: sId, name: n.studentName, className: n.className, score: 0, teachers: new Set() };
+            let pts = 0; if (n.criteria) n.criteria.forEach(c => pts += (criteriaWeights[c] || 0));
+            studentScores[sId].score += pts; studentScores[sId].teachers.add(n.teacherName);
+        });
+
+        let allStudents = Object.values(studentScores).sort((a, b) => b.score - a.score);
+        let winners = []; let classCount = {}; let remainingPool = [];
+
+        for (let s of allStudents) {
+            if (!classCount[s.className]) classCount[s.className] = 0;
+            if (classCount[s.className] < 2 && winners.length < 24) { winners.push(s); classCount[s.className]++; } 
+            else remainingPool.push(s);
+        }
+        for (let s of remainingPool) { if (winners.length < 24) winners.push(s); else break; }
+
+        winners.sort((a, b) => b.score - a.score);
+
+        goldenSection.style.display = 'block';
+        let rows = '';
+        winners.forEach((w, idx) => {
+            let teacherNames = Array.from(w.teachers).join('، ');
+            rows += `<tr>
+                <td><strong>${idx + 1}</strong></td>
+                <td>${escapeHtml(w.className)}</td>
+                <td style="color:var(--moe-dark); font-weight:bold;"><i class="fas fa-star" style="color:var(--moe-gold); margin-left:3px;"></i>${escapeHtml(w.name)}</td>
+                <td><span style="background:#fdfaf2; color:var(--moe-dark); padding:3px 10px; border-radius:15px; font-weight:bold; border: 1px solid var(--moe-gold);">${w.score}</span></td>
+                <td style="font-size: 0.85rem; color: var(--text-muted);">${escapeHtml(teacherNames)}</td>
+            </tr>`;
+        });
+        tbody.innerHTML = rows;
+    }
+    
+    function openConfirmPopup() { confirmPopup.classList.add('active'); }
+    function closeConfirmPopup() { confirmPopup.classList.remove('active'); }
+
+    function executeResetAll() {
+        if(currentUser.role !== 'admin') return;
+        nominations = {}; saveToLocal(); updateNominationsTable(); 
+        closeConfirmPopup(); showToast("تم مسح جميع السجلات بنجاح", 'success');
+    }
+
+    function exportToWord() {
+        if(currentUser.role !== 'admin') return;
+        const entries = Object.values(nominations).filter(n => n);
+        if(!entries.length){ showToast("لا توجد ترشيحات لتصديرها", 'error'); return; }
+        entries.sort((a,b) => a.className.localeCompare(b.className, 'ar'));
+        let rowsHtml='';
+        entries.forEach((nom,idx)=>{ 
+            let criteriaText = nom.criteria ? nom.criteria.join('، ') : 'لم يُحدد';
+            rowsHtml+=`<tr><td>${idx+1}</td><td>${escapeHtml(nom.className)}</td><td style="color:#3d7eb9; font-weight:bold;">${escapeHtml(nom.studentName)}</td><td>${escapeHtml(nom.teacherName)}</td><td>${escapeHtml(nom.teacherSpecialty)}</td><td style="color:#07a869; font-size:10pt;">${escapeHtml(criteriaText)}</td><td>${new Date(nom.nominatedAt).toLocaleDateString('ar-EG')}</td></tr>`; 
+        });
+        const htmlContent=`<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40' dir="rtl"><head><meta charset="utf-8"><title>السجل الشامل للترشيحات</title><style>body { font-family: 'Tahoma', sans-serif; font-size: 12pt; direction: rtl; text-align: right; }h1 { text-align: center; color: #15445a; font-size: 18pt; margin-bottom: 20px; border-bottom: 2px solid #15445a; padding-bottom: 10px; }table { width: 100%; border-collapse: collapse; margin-bottom: 40px; direction: rtl; }th { background-color: #f1f5f9; color: #15445a; border: 1px solid #c2c1c1; padding: 10px; text-align: center; }td { border: 1px solid #c2c1c1; padding: 10px; text-align: center; }.footer { margin-top: 50px; text-align: center; font-size: 13pt; color: #15445a; }.name { color: #15445a; margin-top: 10px; font-weight: bold; }</style></head><body><h1>السجل الشامل لترشيحات الطلاب المتميزين - مدرسة الجشة المتوسطة</h1><table><thead><tr><th>م</th><th>الفصل</th><th>الطالب المرشح</th><th>المعلم</th><th>المادة</th><th>معايير التميز</th><th>التاريخ</th></tr></thead><tbody>${rowsHtml}</tbody></table><div class="footer">إعداد وإشراف الموجه الطلابي<br><div class="name">عبدالهادي بن محمد المحسن</div></div></body></html>`;
+        const blob = new Blob(['\ufeff', htmlContent], {type:'application/msword'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); 
+        a.download = `سجل_الترشيحات_الشامل_${new Date().toISOString().split('T')[0]}.doc`; 
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
+        showToast("تم بدء تحميل ملف Word", "success");
+    }
+
+    function exportFinalToWord() {
+        if(currentUser.role !== 'admin') return;
+        if(Object.keys(nominations).length === 0){ showToast("لا توجد ترشيحات لتصديرها", 'error'); return; }
+        
+        let rowsHtml = '';
+        classesList.forEach((cls, idx) => {
+            const classNoms = Object.values(nominations).filter(n => n.className === cls);
+            let winnerText = "لم يتم الترشيح بعد";
+            let maxScore = 0;
+            
+            if(classNoms.length > 0) {
+                const scores = {};
+                classNoms.forEach(n => {
+                    let currentScore = 0;
+                    if(n.criteria) {
+                        n.criteria.forEach(c => currentScore += (criteriaWeights[c] || 0));
+                    }
+                    scores[n.studentName] = (scores[n.studentName] || 0) + currentScore;
+                });
+                
+                for(let v of Object.values(scores)) if(v > maxScore) maxScore = v;
+                let winners = Object.keys(scores).filter(s => scores[s] === maxScore);
+                winnerText = winners.join(' / ');
+            }
+            
+            rowsHtml += `<tr><td>${idx + 1}</td><td><strong>${escapeHtml(cls)}</strong></td><td style="color:#07a869; font-weight:bold;">${escapeHtml(winnerText)}</td><td>${maxScore}</td></tr>`;
+        });
+        
+        const htmlContent = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40' dir="rtl"><head><meta charset="utf-8"><title>الفرز النهائي للنخبة</title><style>body { font-family: 'Tahoma', sans-serif; font-size: 13pt; direction: rtl; text-align: right; }h1 { text-align: center; color: #07a869; font-size: 18pt; margin-bottom: 20px; border-bottom: 2px solid #07a869; padding-bottom: 10px; }table { width: 100%; border-collapse: collapse; margin-bottom: 40px; direction: rtl; }th { background-color: #f0fdf4; color: #07a869; border: 1px solid #07a869; padding: 12px; text-align: center; }td { border: 1px solid #c2c1c1; padding: 12px; text-align: center; }.footer { margin-top: 50px; text-align: center; font-size: 13pt; color: #15445a; }.name { color: #07a869; margin-top: 10px; font-weight: bold; }</style></head><body><h1>الفرز النهائي (نخبة الفصول الـ 9 بناءً على النقاط) - مدرسة الجشة المتوسطة</h1><table><thead><tr><th>م</th><th>الفصل</th><th>نجم الفصل (الطالب الفائز)</th><th>مجموع النقاط</th></tr></thead><tbody>${rowsHtml}</tbody></table><div class="footer">إعداد وإشراف الموجه الطلابي<br><div class="name">عبدالهادي بن محمد المحسن</div></div></body></html>`;
+        const blob = new Blob(['\ufeff', htmlContent], {type:'application/msword'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); 
+        a.download = `تقرير_الفرز_النهائي_${new Date().toISOString().split('T')[0]}.doc`; 
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
+        showToast("تم بدء تحميل تقرير النخبة", "success");
+    }
+
+    function exportGoldenToWord() {
+        if(currentUser.role !== 'admin') return;
+        const tbody = document.getElementById('goldenListTbody');
+        if(!tbody || tbody.innerHTML === '') { showToast("القائمة الذهبية فارغة", 'error'); return; }
+        
+        let rowsHtml = '';
+        let studentScores = {}; 
+        Object.values(nominations).forEach(n => {
+            let sId = n.studentId;
+            if (!studentScores[sId]) studentScores[sId] = { id: sId, name: n.studentName, className: n.className, score: 0, teachers: new Set() };
+            let pts = 0; if (n.criteria) n.criteria.forEach(c => pts += (criteriaWeights[c] || 0));
+            studentScores[sId].score += pts; studentScores[sId].teachers.add(n.teacherName);
+        });
+        let allStudents = Object.values(studentScores).sort((a, b) => b.score - a.score);
+        let winners = []; let classCount = {}; let remainingPool = [];
+        for (let s of allStudents) {
+            if (!classCount[s.className]) classCount[s.className] = 0;
+            if (classCount[s.className] < 2 && winners.length < 24) { winners.push(s); classCount[s.className]++; } 
+            else remainingPool.push(s);
+        }
+        for (let s of remainingPool) { if (winners.length < 24) winners.push(s); else break; }
+        winners.sort((a, b) => b.score - a.score);
+        
+        winners.forEach((w, idx) => {
+            let teacherNames = Array.from(w.teachers).join('، ');
+            rowsHtml += `<tr><td>${idx + 1}</td><td><strong>${escapeHtml(w.className)}</strong></td><td style="color:#15445a; font-weight:bold;">${escapeHtml(w.name)}</td><td>${w.score}</td><td style="font-size:10pt;">${escapeHtml(teacherNames)}</td></tr>`;
+        });
+        const htmlContent = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40' dir="rtl"><head><meta charset="utf-8"><title>القائمة الذهبية للمكرمين</title><style>body { font-family: 'Tahoma', sans-serif; font-size: 13pt; direction: rtl; text-align: right; }h1 { text-align: center; color: #15445a; font-size: 18pt; margin-bottom: 5px; }p.desc { text-align: center; color: #3d7eb9; font-size: 11pt; margin-bottom: 20px; border-bottom: 2px solid #c1b489; padding-bottom: 15px; }table { width: 100%; border-collapse: collapse; margin-bottom: 40px; direction: rtl; }th { background-color: #fdfaf2; color: #15445a; border: 1px solid #c1b489; padding: 12px; text-align: center; }td { border: 1px solid #c1b489; padding: 12px; text-align: center; }.footer { margin-top: 50px; text-align: center; font-size: 13pt; color: #15445a; }.name { color: #15445a; margin-top: 10px; font-weight: bold; }</style></head><body><h1>القائمة الذهبية للمكرمين (24 جائزة) - مدرسة الجشة المتوسطة</h1><p class="desc">تم الاختيار بناءً على أعلى طالبين تقييماً من كل فصل لضمان العدالة، وإكمال العدد بأعلى الطلاب نقاطاً من بقية الفصول.</p><table><thead><tr><th>م</th><th>الفصل</th><th>الطالب المكرم</th><th>النقاط</th><th>المعلمون الداعمون</th></tr></thead><tbody>${rowsHtml}</tbody></table><div class="footer">إعداد وإشراف الموجه الطلابي<br><div class="name">عبدالهادي بن محمد المحسن</div></div></body></html>`;
+        const blob = new Blob(['\ufeff', htmlContent], {type:'application/msword'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); 
+        a.download = `القائمة_الذهبية_${new Date().toISOString().split('T')[0]}.doc`; 
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
+        showToast("تم بدء تحميل القائمة الذهبية", "success");
+    }
+    
+    function escapeHtml(str){ if(!str) return ''; return str.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+    
+    classSelect.addEventListener('change',(e)=>{ 
+        const cls = e.target.value; 
+        if(cls && currentUser && currentUser.role === 'teacher') displayStudentsForClass(cls); 
+        else studentsContainer.innerHTML='<div class="empty-msg">اختر فصلاً لعرض الطلاب</div>'; 
+    });
+    
+    function init() {
+        const storedUser = localStorage.getItem('schoolNomSystemAuth');
+        if(storedUser) {
+            try { 
+                currentUser = JSON.parse(storedUser); 
+                showAppView(); 
+            } catch(e) { localStorage.removeItem('schoolNomSystemAuth'); }
+        }
+    }
+    init();
+</script>
+</body>
+</html>
